@@ -11,13 +11,5 @@ export default class User {
     this.password = password;
     this.regdate = regdate;
   }
-  //
-  // addUser () {
-  //    db.any("insert into users (login, password, regdate) values  ('" + this.login + "'" + "," + "'" + this.password + "'" + "," + "'" + this.regdate + "'" + ")")
-  //   .then((date) => {
-  //     console.log("ok");
-  //   }).catch((err) => {
-  //     console.log(err);
-  //   });
-  // }
+
 }

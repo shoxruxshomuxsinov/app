@@ -6,7 +6,6 @@ import logger            from 'morgan';
 import cookieParser      from 'cookie-parser';
 import bodyParser        from 'body-parser';
 import User              from './myModule/user';
-import * as utils        from './myModule/utils';
 import * as dbFunctions  from './myModule/dbFunctions';
 import * as chatFunction from './myModule/chatFunctions';
 import * as config       from './config';
@@ -19,7 +18,8 @@ const app    = express();
 let expressWs = require('express-ws')(app);
 let index     = require('./routes/index');
 let clients   = {};
-let users     = [];
+// let users     = [];
+let users = new chatFunction.UserArr();
 
 app.use('/static', express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
@@ -47,13 +47,10 @@ app.get('/reg', (req, res) => {
 });
 
 app.use('/registratsiya', async(req, res) => {
-  let user = new User(req.body.login, req.body.password, "2017-10-18");
-  try {
-    let result = await dbFunctions.addUser(user);
-    res.sendFile(path.join(__dirname + '/public/auth.html'));
+  try{
+    await dbFunctions.regUser(req, res);
   }catch(ex){
-     console.log(ex);
-     res.send(ex);
+    console.log(ex);
   }
 });
 
@@ -62,19 +59,10 @@ app.get('/auth', async(req, res) => {
 });
 
 app.use('/auth', async(req, res) => {
-  let login = req.body.login;
   try{
-    let result = await dbFunctions.authUser(login);
-    if(result.password == req.body.password){
-      req.session.username = req.body.login;
-      req.session.isAuthorized = true;
-      res.sendFile(path.join(__dirname + '/public/chat.html'));
-    } else{
-        res.sendFile(path.join(__dirname + '/public/auth.html'));
-    }
+    await dbFunctions.authUser(req, res);
   } catch(ex){
-      console.log(ex);
-      res.send(ex);
+    console.log(ex);
   }
 });
 
@@ -87,57 +75,19 @@ app.ws('/', async(ws, req) => {
   var username = req.session.username;
   clients[username] = ws;
 
-  users.push(req.session.username);
+  users.addUserToArr(req);
   console.log("novoe soedinenie");
 
   ws.on('message', async (message) => {
-
     if(message != "" || message != " "){
-      if(message == "Open"){
-        try{
-          let result = await dbFunctions.getMessageFromHistory();
-          for (let i in result){
-            let msg = {'username': result[i].username, 'mes': result[i].message, 'time': result[i].time, 'typing': "history"};
-            msg = JSON.stringify(msg);
-            clients[req.session.username].send(msg);
-          }
-
-          let msg = {'online-users': users};
-          chatFunction.sendDataToChat(msg, clients);
-        } catch(ex){
-            console.log(ex);
-        }
-      } else if(message == "typing"){
-          let msg = {'username': req.session.username, 'mes': message, 'typing': true};
-          chatFunction.sendDataToChat(msg, clients);
-
-      } else if(message == "clear"){
-          let msg = {'username': req.session.username, 'mes': message, 'typing': false};
-          chatFunction.sendDataToChat(msg, clients);
-
-      } else {
-          let msg = {'username': req.session.username, 'mes': message, 'typing': false};
-          if(message != "clear" && message != "Open" && message != "" && message != " "){
-            try{
-              await dbFunctions.addMessageToDB(req, message);
-            } catch(ex){
-              console.log(ex);
-            }
-          }
-          chatFunction.sendDataToChat(msg, clients);
-      }
-  }
+      chatFunction.wsSendMessToClients(message, req, users, clients);
+    }
   });
 
   ws.on('close', () => {
-    for(let i = 0; i < users.length; i++){
-      if(users[i] == req.session.username){
-        users.splice(i, 1);
-      }
-    }
+    users.deleteUserFromArr(users, req);
 
-    console.log(users);
-    delete clients[req.session.username];
+    chatFunction.deleteUserFromWS(clients, req);
 
     let msg = {'online-users': users};
     chatFunction.sendDataToChat(msg, clients);

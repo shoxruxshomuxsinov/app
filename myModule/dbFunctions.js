@@ -2,6 +2,7 @@ import express from 'express';
 import WebSocket from 'ws';
 import bodyParser from 'body-parser';
 import multer from 'multer';
+import path from 'path';
 import * as config from '../config';
 import User from '../myModule/user';
 
@@ -11,6 +12,8 @@ const upload = multer();
 const app = express();
 const db = pgp('postgres://ruslan:qwerty123$@' + config.dbserver.host + ':' + config.dbserver.port + '/' + config.dbserver.dbname);
 
+
+app.use('/static', express.static(path.join(__dirname, '/../public')));
 let date = new Date();
 
 export async function showAllUsers(){
@@ -24,7 +27,7 @@ export async function showAllUsers(){
   }
 }
 
-export async function authUser(login){
+export async function checkUser(login){
   try{
     let userPassword = await db.one("select password from users where login='" + login + "'");
     return userPassword;
@@ -58,5 +61,37 @@ export async function getMessageFromHistory(){
     return result;
   } catch(ex){
     console.log(ex);
+  }
+}
+
+export async function regUser(req, res){
+  if(req.body.login != "" && req.body.password != ""){
+    let user = new User(req.body.login, req.body.password, new Date().getFullYear() + "-" + new Date().getMonth() + "-" + new Date().getDate());
+    try {
+      let result = await addUser(user);
+      res.sendFile(path.join(__dirname + '/../public/auth.html'));
+    }catch(ex){
+       console.log(ex);
+       res.send(ex);
+    }
+  } else {
+    res.send("Zapolnite vse polya");
+  }
+}
+
+export async function authUser(req, res){
+  let login = req.body.login;
+  try{
+    let result = await checkUser(login);
+    if(result.password == req.body.password){
+      req.session.username = req.body.login;
+      req.session.isAuthorized = true;
+      res.sendFile(path.join(__dirname + '/../public/chat.html'));
+    } else{
+        res.sendFile(path.join(__dirname + '/../public/auth.html'));
+    }
+  } catch(ex){
+      console.log(ex);
+      res.send(ex);
   }
 }
