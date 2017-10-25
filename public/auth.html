@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Auth</title>
+    <style type="text/css">
+        .form-style-6{
+            font: 95% Arial, Helvetica, sans-serif;
+            max-width: 400px;
+            margin: 10px auto;
+            padding: 16px;
+            background: #F7F7F7;
+        }
+        .form-style-6 h1{
+            background: #43D1AF;
+            padding: 20px 0;
+            font-size: 140%;
+            font-weight: 300;
+            text-align: center;
+            color: #fff;
+            margin: -16px -16px 16px -16px;
+        }
+        .form-style-6 input[type="text"],
+        .form-style-6 input[type="date"],
+        .form-style-6 input[type="datetime"],
+        .form-style-6 input[type="password"],
+        .form-style-6 input[type="email"],
+        .form-style-6 input[type="number"],
+        .form-style-6 input[type="search"],
+        .form-style-6 input[type="time"],
+        .form-style-6 input[type="url"],
+        .form-style-6 textarea,
+        .form-style-6 select
+        {
+            -webkit-transition: all 0.30s ease-in-out;
+            -moz-transition: all 0.30s ease-in-out;
+            -ms-transition: all 0.30s ease-in-out;
+            -o-transition: all 0.30s ease-in-out;
+            outline: none;
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            width: 100%;
+            background: #fff;
+            margin-bottom: 4%;
+            border: 1px solid #ccc;
+            padding: 3%;
+            color: #555;
+            font: 95% Arial, Helvetica, sans-serif;
+        }
+        .form-style-6 input[type="text"]:focus,
+        .form-style-6 input[type="date"]:focus,
+        .form-style-6 input[type="password"]:focus,
+        .form-style-6 input[type="datetime"]:focus,
+        .form-style-6 input[type="email"]:focus,
+        .form-style-6 input[type="number"]:focus,
+        .form-style-6 input[type="search"]:focus,
+        .form-style-6 input[type="time"]:focus,
+        .form-style-6 input[type="url"]:focus,
+        .form-style-6 textarea:focus,
+        .form-style-6 select:focus
+        {
+            box-shadow: 0 0 5px #43D1AF;
+            padding: 3%;
+            border: 1px solid #43D1AF;
+        }
+
+        .form-style-6 input[type="submit"],
+        .form-style-6 input[type="button"]{
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            width: 100%;
+            padding: 3%;
+            background: #43D1AF;
+            border-bottom: 2px solid #30C29E;
+            border-top-style: none;
+            border-right-style: none;
+            border-left-style: none;
+            color: #fff;
+        }
+        .form-style-6 input[type="submit"]:hover,
+        .form-style-6 input[type="button"]:hover{
+            background: #2EBC99;
+        }
+
+        @import url(https://fonts.googleapis.com/css?family=Open+Sans);
+
+body{
+  font-family:'Open Sans', sans-serif;
+  background:#151837;
+  width:90%;
+  margin:0 auto;
+  padding:2em 0 6em;
+}
+h1:before{
+  content: "// ";
+}
+h1{
+  font-size:3em;
+  color:#fefefe;
+  text-transform:lowercase;
+}
+.wrapper{
+  margin:3em 0;
+}
+a,a:visited,a:hover,a:active{
+  -webkit-backface-visibility:hidden;
+          backface-visibility:hidden;
+	position:relative;
+  transition:0.5s color ease;
+	text-decoration:none;
+	color:#81b3d2;
+	font-size:2.5em;
+}
+a:hover{
+	color:#d73444;
+}
+a.before:before,a.after:after{
+  content: "";
+  transition:0.5s all ease;
+  -webkit-backface-visibility:hidden;
+          backface-visibility:hidden;
+  position:absolute;
+}
+a.before:before{
+  top:-0.25em;
+}
+a.after:after{
+  bottom:-0.25em;
+}
+a.before:before,a.after:after{
+  height:5px;
+  height:0.35rem;
+  width:0;
+  background:#d73444;
+}
+a.first:after{
+  left:0;
+}
+a.second:after{
+  right:0;
+}
+a.third:after,a.sixth:before,a.sixth:after{
+  left:50%;
+  -webkit-transform:translateX(-50%);
+          transform:translateX(-50%);
+}
+a.fourth:before,a.fourth:after{
+  left:0;
+}
+a.fifth:before,a.fifth:after{
+  right:0;
+}
+a.seventh:before{
+  right:0;
+}
+a.seventh:after{
+  left:0;
+}
+a.eigth:before{
+  left:0;
+}
+a.eigth:after{
+  right:0;
+}
+a.before:hover:before,a.after:hover:after{
+  width:100%;
+}
+.square{
+  box-sizing:border-box;
+  margin-left:-0.4em;
+  position:relative;
+  font-size:2.5em;
+  overflow:hidden;
+}
+.square a{
+  position:static;
+  font-size:100%;
+  padding:0.2em 0.4em;
+}
+.square:before,.square:after{
+  content: "";
+  box-sizing:border-box;
+  transition:0.25s all ease;
+  -webkit-backface-visibility:hidden;
+          backface-visibility:hidden;
+  position:absolute;
+  width:5px;
+  width:0.35rem;
+  height:0;
+  background:#d73444;
+}
+.square:before{
+  left:0;
+  bottom:-0.2em;
+}
+.square.individual:before{
+  transition-delay:0.6s;
+}
+.square:after{
+  right:0;
+  top:-0.2em;
+}
+.square.individual:after{
+  transition-delay:0.2s;
+}
+.square a:before{
+  left:0;
+  transition:0.25s all ease;
+}
+.square a:after{
+  right:0;
+  transition:0.25s all ease;
+}
+.square.individual a:after{
+  transition:0.25s all ease 0.4s;
+}
+.square:hover:before,.square:hover:after{
+  height:calc(100% + 0.4em);
+}
+.square:hover a:before,.square:hover a:after{
+  width:100%;
+}
+  </style>
+  </head>
+
+  <body>
+
+      <!-- <form name="authForm" action="http://localhost:3000/auth" method="post">
+        <table>
+          <tr>
+            <td>Login</td>
+            <td>
+              <input type="text" name="login">
+            </td>
+          </tr>
+          <tr>
+            <td>Password</td>
+            <td>
+              <input type="password" name="password" >
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input type="submit"  value="Auth">
+            </td>
+
+          </tr>
+        </table>
+      </form>
+
+      <div>
+          <a href="http://localhost:3000/reg">Registratsiya</a>
+      </div> -->
+
+
+      <div class="form-style-6">
+        <h1>Auth</h1>
+        <form name="authForm" action="http://192.168.7.186:3000/auth" method="post">
+          <input type="text" name="login" placeholder="Your Login" />
+          <input type="password" name="password" placeholder="Password" />
+          <!-- <textarea name="field3" placeholder="Type your Message"></textarea> -->
+          <input type="submit" value="Auth"/>
+        </form>
+      </div>
+
+      <div class="wrapper" style="">
+        <span class="square">
+          <a class="tenth before after" href="http://192.168.7.186:3000/reg">Registratsiya</a>
+        </span>
+      </div>
+
+
+  </body>
+</html>
