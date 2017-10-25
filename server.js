@@ -6,7 +6,6 @@ import logger           from 'morgan';
 import cookieParser     from 'cookie-parser';
 import bodyParser       from 'body-parser';
 import User             from './myModule/user';
-import SocketClients    from './myModule/socketClient';
 import * as utils       from './myModule/utils';
 import * as dbFunctions from './myModule/dbFunctions';
 import * as config      from './config';
@@ -91,7 +90,7 @@ app.get('/',(req, res) => {
   res.sendFile(path.join(__dirname + '/public/auth.html'));
 });
 
-app.ws('/', async function(ws, req){
+app.ws('/', async(ws, req) => {
 
   var username = req.session.username;
   clients[username] = ws;
@@ -106,9 +105,9 @@ app.ws('/', async function(ws, req){
         try{
           let result = await dbFunctions.getMessageFromHistory();
           for (let i in result){
-            let m = {'username': result[i].username, 'mes': result[i].message, 'time': result[i].time, 'typing': "history"};
-            m = JSON.stringify(m);
-            clients[req.session.username].send(m);
+            let msg = {'username': result[i].username, 'mes': result[i].message, 'time': result[i].time, 'typing': "history"};
+            msg = JSON.stringify(msg);
+            clients[req.session.username].send(msg);
           }
 
           let msg = {'online-users': users};
