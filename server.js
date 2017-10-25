@@ -36,6 +36,9 @@ app.use(session({
   cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
 }));
 
+// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// app.use(logger('dev'));
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
@@ -47,8 +50,7 @@ function sendDataToChat(message, clients){
     }
   }
 }
-// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-// app.use(logger('dev'));
+
 app.get('/reg', (req, res) => {
   res.sendFile(path.join(__dirname + '/public/reg.html'));
 });
@@ -64,7 +66,7 @@ app.use('/registratsiya', async(req, res) => {
   }
 });
 
-app.get('/auth', (req, res) => {
+app.get('/auth', async(req, res) => {
   res.sendFile(path.join(__dirname + '/public/auth.html'));
 });
 
