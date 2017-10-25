@@ -1,24 +1,25 @@
-import session          from 'express-session';
-import express          from 'express';
-import path             from 'path';
-import multer           from 'multer';
-import logger           from 'morgan';
-import cookieParser     from 'cookie-parser';
-import bodyParser       from 'body-parser';
-import User             from './myModule/user';
-import * as utils       from './myModule/utils';
-import * as dbFunctions from './myModule/dbFunctions';
-import * as config      from './config';
+import session           from 'express-session';
+import express           from 'express';
+import path              from 'path';
+import multer            from 'multer';
+import logger            from 'morgan';
+import cookieParser      from 'cookie-parser';
+import bodyParser        from 'body-parser';
+import User              from './myModule/user';
+import * as utils        from './myModule/utils';
+import * as dbFunctions  from './myModule/dbFunctions';
+import * as chatFunction from './myModule/chatFunctions';
+import * as config       from './config';
 
 const pgp    = require("pg-promise")(/*options*/);
 const db     = pgp('postgres://dbtest:1234@' + config.dbserver.host + ':' + config.dbserver.port + '/' + config.dbserver.dbname);
 const upload = multer();
 const app    = express();
 
-let expressWs     = require('express-ws')(app);
-let index         = require('./routes/index');
-let clients       = {};
-let users         = [];
+let expressWs = require('express-ws')(app);
+let index     = require('./routes/index');
+let clients   = {};
+let users     = [];
 
 app.use('/static', express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
@@ -40,15 +41,6 @@ app.use(session({
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-
-function sendDataToChat(message, clients){
-  message = JSON.stringify(message);
-  for(let a in clients){
-    if(clients[a]){
-      clients[a].send(message);
-    }
-  }
-}
 
 app.get('/reg', (req, res) => {
   res.sendFile(path.join(__dirname + '/public/reg.html'));
@@ -111,17 +103,17 @@ app.ws('/', async(ws, req) => {
           }
 
           let msg = {'online-users': users};
-          sendDataToChat(msg, clients);
+          chatFunction.sendDataToChat(msg, clients);
         } catch(ex){
             console.log(ex);
         }
       } else if(message == "typing"){
           let msg = {'username': req.session.username, 'mes': message, 'typing': true};
-          sendDataToChat(msg, clients);
+          chatFunction.sendDataToChat(msg, clients);
 
       } else if(message == "clear"){
           let msg = {'username': req.session.username, 'mes': message, 'typing': false};
-          sendDataToChat(msg, clients);
+          chatFunction.sendDataToChat(msg, clients);
 
       } else {
           let msg = {'username': req.session.username, 'mes': message, 'typing': false};
@@ -132,7 +124,7 @@ app.ws('/', async(ws, req) => {
               console.log(ex);
             }
           }
-          sendDataToChat(msg, clients);
+          chatFunction.sendDataToChat(msg, clients);
       }
   }
   });
@@ -148,7 +140,7 @@ app.ws('/', async(ws, req) => {
     delete clients[req.session.username];
 
     let msg = {'online-users': users};
-    sendDataToChat(msg, clients);
+    chatFunction.sendDataToChat(msg, clients);
   });
 });
 
