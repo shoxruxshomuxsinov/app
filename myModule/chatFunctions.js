@@ -8,7 +8,17 @@ export class UserArr{
   }
 
   addUserToArr(req){
-    this.users.push(req.session.username);
+    if(req){
+      let found = false;
+      for(let i = 0; i < this.users.length; i++){
+          if(req.session.username == this.users[i]){
+              found = true;
+          }
+      }
+      if(found == false){
+        this.users.push(req.session.username);
+      }
+    }
   }
 
   deleteUserFromArr(users, req){
@@ -53,15 +63,15 @@ export async function wsSendMessToClients(message, req, users, clients){
         console.log(ex);
     }
   } else if(message == "typing"){
-      let msg = {'username': req.session.username, 'mes': message, 'typing': true};
+      let msg = {'username': req.session.username, 'mes': message, 'typing': true, 'private': false};
       sendDataToChat(msg, clients);
 
   } else if(message == "clear"){
-      let msg = {'username': req.session.username, 'mes': message, 'typing': false};
+      let msg = {'username': req.session.username, 'mes': message, 'typing': false, 'private': false};
       sendDataToChat(msg, clients);
 
   } else {
-      let msg = {'username': req.session.username, 'mes': message, 'typing': false};
+      let msg = {'username': req.session.username, 'mes': message, 'typing': false, 'private': false};
       if(message != "clear" && message != "Open" && message != "" && message != " "){
         try{
           await dbFunctions.addMessageToDB(req, message);
