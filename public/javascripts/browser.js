@@ -109,26 +109,3 @@
       $('.' + message.username).remove();
       onlineUsers.splice(message.username, 1);
     }
-
-
-    // function showOnline(message){
-    //
-    //     var found = false;
-    //     for(var i = 0; i < onlineUsers.length; i++){
-    //       if(onlineUsers[i] == message.username){
-    //         found = true;
-    //       }
-    //     }
-    //     if(found == false && message.typing != "history"){
-    //         onlineUsers.push(message.username);
-    //         var onlineUser = document.createElement('div');
-    //         var typingUser = document.createElement('span');
-    //         typingUser.appendChild(document.createTextNode("typing..."));
-    //         typingUser.setAttribute('id', message.username);
-    //         onlineUser.appendChild(document.createTextNode(message.username));
-    //         onlineUser.setAttribute('class', message.username);
-    //         onlineUser.appendChild(typingUser);
-    //         document.getElementById('online').appendChild(onlineUser);
-    //     }
-    //
-    // }
