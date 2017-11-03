@@ -66,27 +66,39 @@ $('#myInput').keyup(function(){
 
 // обработчик входящих сообщ
 socket.onmessage = function(event) {
+
   var date = new Date();
   var incomingMessage = event.data;
+
   incomingMessage = JSON.parse(incomingMessage);
 
   if(incomingMessage.event == "typing"){
       $('span#' + incomingMessage.username).addClass('typing');
+
   } else if(incomingMessage.event == "clear"){
       $('span#' + incomingMessage.username).removeClass('typing');
+
   } else if(incomingMessage.event == "sendMsg"){
       showMessage(incomingMessage, date);
+
   } else if(incomingMessage.event == "connect"){
+
       showHistory(incomingMessage);
       connectToChat(incomingMessage);
+
   } else if(incomingMessage.event == "sendHistory"){
       showHistory(incomingMessage);
+
   } else if(incomingMessage['onlineUsers']){
+
     showOnlineUsers(incomingMessage['onlineUsers']);
     return;
+
   } else if(incomingMessage.event == "switchGroup"){
       switchGroup(incomingMessage);
+
   } else if(incomingMessage.event == "newGroup"){
+
       var found = checkGroup(incomingMessage, myGroups);
       if(found == false){
         addNewGroup(incomingMessage);

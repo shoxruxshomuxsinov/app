@@ -108,10 +108,10 @@ app.ws('/', async(ws, req) => {
             m = JSON.stringify(m);
             dbFunctions.sendDataToChat(rooms, m, req);
 
-      }else if(msg.event == "addToPrivateGroup"){
+      } else if(msg.event == "addToPrivateGroup"){
             dbFunctions.addToPrivateGroup(msg, rooms, req);
 
-      }else if(msg.event == "switchGroup"){
+      } else if(msg.event == "switchGroup"){
 
             dbFunctions.switchGroup(msg, rooms, req);
 
