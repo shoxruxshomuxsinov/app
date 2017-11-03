@@ -83,3 +83,31 @@ export async function wsSendMessToClients(message, req, users, clients){
   }
 
 }
+
+
+// function toPrivateGroup(message, rooms, req){
+//     let foundGroup = checkGroup(req, rooms);
+//     if(foundGroup == false){
+//       let roomname = req.session.username;
+//       rooms[roomname] = {"friends":{}};
+//       rooms[roomname].friends[roomaname] = rooms.publicGroup.clients[roomname];
+//       rooms[roomname].friends[message.who] = rooms.publicGroup.clients[message.who];
+//
+//       let msg = {"event": "newGroup", "group": roomname};
+//       msg = JSON.stringify(msg);
+//
+//       for(let i in rooms[roomname].friends){
+//         rooms[roomname].friends[i].send(msg);
+//       }
+//     }
+// }
+//
+// function checkGroup(req, rooms){
+//   let found = false;
+//   for(let i in rooms){
+//     if(rooms[i] == req.session.username){
+//       found == true;
+//     }
+//   }
+//   return found;
+// }

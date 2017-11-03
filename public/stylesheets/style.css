@@ -6,3 +6,33 @@
 a {
   color: #00B7FF;
 }*/
+
+body{
+  font-family:'Open Sans', sans-serif;
+  background:#151837;
+  color: white;
+}
+
+hr {
+  color: red;
+}
+
+/*#mainDiv {
+  width: 100%;
+  height: 1000px;
+  border: 1px solid white;
+}*/
+
+/*#leftCont {
+  width: 70%;
+  height: 99.8%;
+  border: 1px solid white;
+  float: left;
+}
+
+#rightCont {
+  width: 29.7%;
+  height: 99.8%;
+  border: 1px solid white;
+  float: right;
+}*/
